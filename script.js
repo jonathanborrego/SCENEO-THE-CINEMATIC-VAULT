@@ -399,6 +399,41 @@ mobileFilterToggle.addEventListener("click", () => {
 
 
 /* =========================================
+   MOBILE FILTER PANEL DISMISSAL
+   Close the panel when tapping outside
+   or pressing the Escape key.
+   ========================================= */
+
+// Close filters when clicking outside the panel
+document.addEventListener("pointerdown", (event) => {
+
+    // Do nothing if the panel is already closed
+    if (mobileFilterPanel.hidden) return;
+
+    // Keep the panel open when interacting with its controls
+    if (
+        mobileFilterPanel.contains(event.target) ||
+        mobileFilterToggle.contains(event.target)
+    ) {
+        return;
+    }
+
+    closeMobileFilters();
+});
+
+// Allow keyboard users to close the panel with Escape
+document.addEventListener("keydown", (event) => {
+
+    if (event.key === "Escape" && !mobileFilterPanel.hidden) {
+        closeMobileFilters();
+        mobileFilterToggle.focus();
+    }
+});
+
+
+
+
+/* =========================================
    SEARCH FORM
    Executes a movie search on submission.
    ========================================= */
