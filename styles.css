@@ -632,3 +632,62 @@ a {
     }
 }
 
+
+/* =========================================
+   MOVIE LOADING ANIMATION
+   Displays while fetching data from OMDb.
+   ========================================= */
+
+/* Loading indicator container */
+.loading {
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* Keep the indicator hidden until needed */
+.loading[hidden] {
+    display: none;
+}
+
+/* Animated violet spinner */
+.loading__spinner {
+    width: 46px;
+    height: 46px;
+
+    border: 4px solid rgba(167, 139, 250, 0.15);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+
+    animation: spin 800ms linear infinite;
+}
+
+/* Spinner rotation */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Loading message */
+.loading__text {
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Accessibility: reduce animations when requested */
+@media (prefers-reduced-motion: reduce) {
+    .loading__spinner {
+        animation: none;
+    }
+}
+
+

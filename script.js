@@ -24,8 +24,21 @@ const searchInput = document.getElementById("search-input");
 const statusMessage = document.getElementById("status-message");
 const moviesContainer = document.getElementById("movies-container");
 
+// Loading indicator
+const loading = document.getElementById("loading");
+
 // Movie sorting controls
 const sortFilter = document.getElementById("sort-filter");
+
+
+/* =========================================
+   CONTENT TYPE FILTER
+   Selects movies, TV series, or all results.
+   ========================================= */
+
+// Reference the content type dropdown
+const typeFilter = document.getElementById("type-filter");
+
 
 // Store the latest search results
 let currentMovies = [];
@@ -62,23 +75,49 @@ let totalPages = 1;
 
 const fetchMovies = async (searchQuery, page = 1) => {
 
-    // Display loading message and clear old results
-    statusMessage.textContent = "Searching for movies...";
+    // Clear the previous message and show the spinner
+    statusMessage.textContent = "";
+    loading.hidden = false;
     // moviesContainer.replaceChildren();
     // pagination.hidden = true;
 
 
-    // Keep existing cards visible while loading another page
-    if (page === 1) {
-        moviesContainer.replaceChildren();
-    }
 
+    /* =========================================
+       PAGINATION LOADING
+       Clears old results and brings the user
+       to the loading animation immediately.
+       ========================================= */
+
+    // Remove previous movie cards while loading
+    moviesContainer.replaceChildren();
+
+    // Hide pagination until the new results arrive
     pagination.hidden = true;
+
+    // Scroll to Explore Movies while the API loads
+    document.getElementById("discover").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
 
 
     try {
-        // Fetch the requested page of movie results
-        const url = `${API_URL}?apikey=${API_KEY}&s=${encodeURIComponent(searchQuery)}&page=${page}`;
+
+        /* =========================================
+           API URL WITH CONTENT TYPE FILTER
+           Requests movies, series, or all content.
+           ========================================= */
+
+        // Build the API URL with the search query and page
+        let url = `${API_URL}?apikey=${API_KEY}&s=${encodeURIComponent(searchQuery)}&page=${page}`;
+
+        // Add a content type only when one is selected
+        if (typeFilter.value) {
+            url += `&type=${typeFilter.value}`;
+        }
+
 
         const response = await fetch(url);
 
@@ -135,8 +174,15 @@ const fetchMovies = async (searchQuery, page = 1) => {
             "Something went wrong. Please try again.";
 
         console.error("OMDb API Error:", error);
+
+    } finally {
+
+        // Hide the spinner whether the request succeeds or fails
+        loading.hidden = true;
+
     }
 };
+
 
 
 
@@ -183,6 +229,23 @@ const sortMovies = (sortBy) => {
     renderMovies(sortedMovies);
 };
 
+
+
+/* =========================================
+   CONTENT TYPE FILTER EVENT
+   Fetches matching movies or TV series
+   whenever the selected type changes.
+   ========================================= */
+
+typeFilter.addEventListener("change", () => {
+
+    // Don't fetch anything if no search has been made
+    if (!currentSearch) return;
+
+    // Load page 1 using the selected content type
+    fetchMovies(currentSearch, 1);
+
+});
 
 
 /* =========================================

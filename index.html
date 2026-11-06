@@ -143,6 +143,24 @@
                     Search for a movie to start exploring.
                 </p>
 
+
+                <!-- =========================================
+                   MOVIE LOADING INDICATOR
+                   Displays while fetching data from OMDb.
+                   ========================================= -->
+                <div id="loading" class="loading" role="status" hidden>
+
+                    <!-- Animated loading spinner -->
+                    <span class="loading__spinner" aria-hidden="true"></span>
+
+                    <!-- Loading message -->
+                    <p class="loading__text">
+                        Finding your next favorite movie...
+                    </p>
+
+                </div>
+
+
                 <!-- Movie cards will be generated here by JavaScript -->
                 <div id="movies-container" class="movies">
                 </div>
