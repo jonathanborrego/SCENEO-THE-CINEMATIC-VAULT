@@ -100,7 +100,8 @@
           Displays movie results fetched from OMDb.
           ========================================
          -->
-        <section id="discover" class="discover">
+        <!-- Hidden until the user performs a movie search -->
+        <section id="discover" class="discover" hidden>
             <div class="container">
 
                 <!-- Section heading and future filter controls -->
@@ -198,6 +199,145 @@
 
 
     </main>
+
+
+
+
+    <!-- =========================================
+     MOBILE FLOATING CONTROLS
+     Quick access to search and filters.
+     Visible on mobile devices only.
+     ========================================= -->
+    <div class="mobile-actions">
+
+
+        <!-- =========================================
+            MOBILE FILTER PANEL
+            Holds the existing type and sort filters.
+        ========================================= -->
+        <div id="mobile-filter-panel" class="mobile-filter-panel" aria-label="Movie filters" hidden>
+            <!-- Panel heading -->
+            <div class="mobile-filter-panel__header">
+                <h3>Filter &amp; Sort</h3>
+            </div>
+
+            <!-- Existing filters will be placed here on mobile -->
+            <div id="mobile-filter-controls"></div>
+        </div>
+
+
+        <!-- Open the movie filters panel -->
+        <button type="button" id="mobile-filter-toggle" class="mobile-actions__button" aria-label="Open movie filters"
+            aria-expanded="false">
+            <!-- Filter icon -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                aria-hidden="true">
+                <path d="M4 7h16M4 17h16" />
+                <circle cx="9" cy="7" r="2" fill="currentColor" />
+                <circle cx="15" cy="17" r="2" fill="currentColor" />
+            </svg>
+        </button>
+
+        <!-- Open the floating search bar -->
+        <button type="button" id="mobile-search-toggle" class="mobile-actions__button" aria-label="Open movie search"
+            aria-expanded="false">
+            <!-- Search icon -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                aria-hidden="true">
+                <circle cx="11" cy="11" r="7" />
+                <path d="m20 20-4-4" />
+            </svg>
+        </button>
+
+    </div>
+
+
+
+
+
+    <!-- =========================================
+     FOOTER SECTION
+     Displays branding, navigation, and
+     movie data attribution.
+     ========================================= -->
+
+    <!-- =========================================
+     FOOTER SECTION
+     SCENEO branding, developer credits,
+     and movie data attribution.
+     ========================================= -->
+    <footer class="footer">
+        <div class="container">
+
+            <!-- Main footer: left and right columns -->
+            <div class="footer__main">
+
+                <!-- LEFT: Branding and navigation -->
+                <div class="footer__content">
+
+                    <!-- SCENEO branding -->
+                    <div class="footer__brand">
+                        <h2 class="footer__logo">
+                            SCENEO<span class="purple">.</span>
+                        </h2>
+
+                        <p class="footer__subtitle">
+                            THE CINEMATIC VAULT
+                        </p>
+                    </div>
+
+                    <!-- Footer navigation -->
+                    <div class="footer__links">
+                        <a href="#discover">Discover</a>
+
+                        <a href="https://www.omdbapi.com/" target="_blank" rel="noopener noreferrer">
+                            OMDb API
+                        </a>
+                    </div>
+
+                    <!-- Movie data attribution -->
+                    <p class="footer__attribution">
+                        Movie data provided by OMDb API.
+                    </p>
+
+                </div>
+
+                <!-- RIGHT: Developer information -->
+                <div class="footer__credits">
+
+                    <p class="footer__credits-label">
+                        CREATED BY
+                    </p>
+
+                    <p class="footer__creator">
+                        Jonathan Borrego
+                    </p>
+
+                    <!-- Professional website links -->
+                    <div class="footer__credits-links">
+
+                        <!-- Personal portfolio -->
+                        <a href="https://jonathanborrego.dev/" target="_blank" rel="noopener noreferrer">
+                            jonathanborrego.dev
+                        </a>
+
+                        <!-- Development company -->
+                        <a href="https://divergentdevelopment.com/" target="_blank" rel="noopener noreferrer">
+                            divergentdevelopment.com
+                        </a>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- BOTTOM: Copyright -->
+            <div class="footer__bottom">
+                <p>&copy; 2026 SCENEO. All rights reserved.</p>
+            </div>
+
+        </div>
+    </footer>
 
 
 

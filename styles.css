@@ -46,11 +46,227 @@ html {
 }
 
 /* Base page appearance */
+
+/* Base page layout */
 body {
     font-family: 'Manrope', sans-serif;
     background-color: var(--bg-primary);
     color: var(--text-primary);
+
+    /* Make the page fill the entire screen */
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
 }
+
+/* Expand the main content to keep the footer at the bottom */
+main {
+    flex: 1;
+}
+
+
+/* =========================================
+   MOBILE FLOATING ACTION BUTTONS
+   Fixed search and filter shortcuts.
+   Displayed on mobile devices only.
+   ========================================= */
+
+/* Hide floating controls on desktop */
+.mobile-actions {
+    display: none;
+}
+
+/* =========================================
+   MOBILE LAYOUT
+   ========================================= */
+
+@media (max-width: 600px) {
+
+    /* Position buttons at the bottom-right */
+    .mobile-actions {
+        position: fixed;
+        bottom: calc(20px + env(safe-area-inset-bottom));
+        right: 18px;
+        z-index: 200;
+
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    /* Shared circular button styling */
+    .mobile-actions__button {
+        width: 54px;
+        height: 54px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: rgba(39, 31, 65, 0.95);
+        color: white;
+
+        border: 1px solid rgba(167, 139, 250, 0.4);
+        border-radius: 50%;
+
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+
+        cursor: pointer;
+        transition: transform 200ms ease, background 200ms ease;
+    }
+
+    /* Search button uses a brighter violet */
+    #mobile-search-toggle {
+        background: #8054d9;
+        border-color: var(--accent);
+    }
+
+    /* Floating button icons */
+    .mobile-actions__button svg {
+        width: 24px;
+        height: 24px;
+    }
+
+
+    /* Hide the original search bar on mobile */
+    .hero .search {
+        display: none;
+    }
+
+    /* Display the search bar beside the floating button */
+    .mobile-search-open .hero .search {
+        position: fixed;
+        bottom: calc(20px + env(safe-area-inset-bottom));
+        left: 18px;
+        right: 84px;
+        z-index: 201;
+
+        display: flex;
+        width: auto;
+        max-width: none;
+        margin: 0;
+        padding: 4px;
+
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Compact search input */
+    .mobile-search-open .search__input {
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    /* Compact submit button */
+    .mobile-search-open .search__button {
+        padding: 11px 12px;
+        font-size: 12px;
+    }
+
+    /* Change the search icon into a close button */
+    .mobile-search-open #mobile-search-toggle svg {
+        display: none;
+    }
+
+    .mobile-search-open #mobile-search-toggle::after {
+        content: "×";
+        font-size: 28px;
+    }
+
+
+    /* Touch feedback */
+    .mobile-actions__button:active {
+        transform: scale(0.92);
+    }
+
+    /* Keyboard accessibility */
+    .mobile-actions__button:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 4px;
+    }
+}
+
+
+/* =========================================
+   MOBILE FLOATING FILTER PANEL
+   Dark glass panel beside the filter button.
+   ========================================= */
+
+@media (max-width: 600px) {
+
+    /* Floating filter panel */
+    .mobile-filter-panel {
+        position: absolute;
+        right: calc(100% + 12px);
+        bottom: 66px;
+
+        width: min(250px, calc(100vw - 110px));
+        padding: 18px;
+
+        background: rgba(25, 22, 43, 0.96);
+        backdrop-filter: blur(18px);
+
+        border: 1px solid rgba(167, 139, 250, 0.45);
+        border-radius: 18px;
+
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+    }
+
+    /* Keep the panel hidden until opened */
+    .mobile-filter-panel[hidden] {
+        display: none;
+    }
+
+    /* Panel title */
+    .mobile-filter-panel__header {
+        margin-bottom: 16px;
+    }
+
+    .mobile-filter-panel__header h3 {
+        color: #ffffff;
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    /* Stack the existing dropdowns vertically */
+    #mobile-filter-controls .discover__filters {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    /* Make dropdowns fill the floating panel */
+    #mobile-filter-controls .filter__select {
+        width: 100%;
+        max-width: none;
+        padding: 12px;
+
+        background: #111525;
+        color: #ffffff;
+
+        border: 1px solid rgba(167, 139, 250, 0.25);
+        border-radius: 10px;
+
+        font-size: 13px;
+    }
+
+    /* Highlight the selected dropdown */
+    #mobile-filter-controls .filter__select:focus {
+        outline: 2px solid #a78bfa;
+        outline-offset: 2px;
+    }
+}
+
+
+/* Respect reduced-motion settings */
+@media (prefers-reduced-motion: reduce) {
+    .mobile-actions__button {
+        transition: none;
+    }
+}
+
+
 
 /* Default link styling */
 a {
@@ -691,3 +907,364 @@ a {
 }
 
 
+
+
+
+/* =========================================
+   FOOTER SECTION
+   Branding, navigation, and attribution.
+   ========================================= */
+
+/* Main footer container */
+.footer {
+    margin-top: 60px;
+    padding: 48px 0 24px;
+    background-color: #080b14;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Branding and navigation layout */
+.footer__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 36px;
+}
+
+/* Footer brand name */
+.footer__logo {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+/* Small branding subtitle */
+.footer__subtitle {
+    margin-top: 4px;
+    color: var(--text-secondary);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 1.4px;
+}
+
+/* Footer navigation links */
+.footer__links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.footer__links a {
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 600;
+    transition: color 200ms ease;
+}
+
+/* Link hover and keyboard focus */
+.footer__links a:hover,
+.footer__links a:focus-visible {
+    color: var(--accent);
+}
+
+/* Copyright and attribution */
+.footer__bottom {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 24px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+/* =========================================
+   FOOTER RESPONSIVENESS
+   ========================================= */
+
+@media (max-width: 600px) {
+    .footer {
+        margin-top: 30px;
+        padding: 36px 0 24px;
+    }
+
+    /* Stack footer sections on smaller screens */
+    .footer__content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 24px;
+    }
+
+    .footer__bottom {
+        flex-direction: column;
+        gap: 8px;
+        font-size: 11px;
+    }
+}
+
+
+/* =========================================
+   FOOTER DEVELOPER CREDITS
+   Links to the developer's portfolio and company.
+   ========================================= */
+
+/* Developer attribution section */
+.footer__credits {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+
+    margin-top: 24px;
+    padding-top: 24px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-secondary);
+    font-size: 13px;
+    text-align: center;
+}
+
+/* Container for professional website links */
+.footer__credits-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+}
+
+/* Portfolio and company links */
+.footer__credits-links a {
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 600;
+    transition: color 200ms ease;
+}
+
+/* Link interaction states */
+.footer__credits-links a:hover,
+.footer__credits-links a:focus-visible {
+    color: #c4b5fd;
+    text-decoration: underline;
+}
+
+/* =========================================
+   MOBILE FOOTER CENTERING
+   Aligns all footer sections on smaller screens.
+   ========================================= */
+
+@media (max-width: 600px) {
+
+    /* Center branding and navigation */
+    .footer__content {
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer__brand {
+        text-align: center;
+    }
+
+    .footer__links {
+        justify-content: center;
+    }
+
+    /* Center copyright and movie data attribution */
+    .footer__bottom {
+        align-items: center;
+        text-align: center;
+    }
+
+    /* Stack developer website links vertically */
+    .footer__credits-links {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+}
+
+
+/* =========================================
+   FINAL FOOTER LAYOUT
+   Two-column design with centered copyright.
+   ========================================= */
+
+/* Left branding and right developer credits */
+.footer__main {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+}
+
+/* Left column: Brand, links and attribution */
+.footer__content {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 14px;
+    padding-bottom: 0;
+    text-align: left;
+}
+
+/* Movie data credit */
+.footer__attribution {
+    color: var(--text-secondary);
+    font-size: 11px;
+}
+
+/* Right column: Developer information */
+.footer__credits {
+    align-items: flex-end;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    text-align: right;
+}
+
+/* Created by label */
+.footer__credits-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+/* Developer name */
+.footer__creator {
+    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Stack professional links on the right */
+.footer__credits-links {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+/* Copyright beneath both columns */
+.footer__bottom {
+    justify-content: center;
+    align-items: center;
+    margin-top: 32px;
+    padding-top: 18px;
+    text-align: center;
+    font-size: 11px;
+}
+
+/* =========================================
+   MOBILE FOOTER LAYOUT
+   Retains two columns on smaller devices.
+   ========================================= */
+
+@media (max-width: 600px) {
+
+    .footer {
+        padding: 28px 0 18px;
+    }
+
+    .footer__main {
+        gap: 14px;
+    }
+
+    .footer__content {
+        align-items: flex-start;
+        text-align: left;
+        gap: 12px;
+    }
+
+    .footer__brand {
+        text-align: left;
+    }
+
+    .footer__logo {
+        font-size: 21px;
+    }
+
+    .footer__links {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .footer__links a,
+    .footer__credits-links a {
+        font-size: 11px;
+    }
+
+    .footer__credits {
+        align-items: flex-end;
+        text-align: right;
+    }
+
+    .footer__credits-links {
+        align-items: flex-end;
+    }
+
+    /* Allow long domain names to wrap */
+    .footer__credits-links a {
+        overflow-wrap: anywhere;
+    }
+
+    .footer__attribution {
+        font-size: 10px;
+    }
+
+    .footer__bottom {
+        margin-top: 24px;
+        font-size: 10px;
+    }
+}
+
+
+
+
+/* =========================================
+   MOBILE APP-STYLE NAVIGATION
+   Compact sticky header for mobile devices.
+   ========================================= */
+
+@media (max-width: 600px) {
+
+    /* Keep navigation visible while scrolling */
+    .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+
+        background-color: rgba(11, 14, 25, 0.9);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+    }
+
+    /* Reduce navigation height on mobile */
+    .nav {
+        height: 64px;
+        padding: 0 18px;
+    }
+
+    /* Compact logo */
+    .logo__name {
+        font-size: 23px;
+    }
+
+    .logo__subtitle {
+        font-size: 8px;
+        letter-spacing: 1px;
+    }
+
+    /* Touch-friendly Discover navigation */
+    .nav__link {
+        padding: 10px 14px;
+        background-color: rgba(167, 139, 250, 0.1);
+        border: 1px solid rgba(167, 139, 250, 0.15);
+        border-radius: 10px;
+    }
+
+    /* Prevent sticky header from covering section titles */
+    #discover {
+        scroll-margin-top: 70px;
+    }
+}

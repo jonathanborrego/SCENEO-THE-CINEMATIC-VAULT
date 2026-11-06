@@ -75,6 +75,11 @@ let totalPages = 1;
 
 const fetchMovies = async (searchQuery, page = 1) => {
 
+
+    // Show the Discover section once a search begins
+    document.getElementById("discover").hidden = false;
+
+
     // Clear the previous message and show the spinner
     statusMessage.textContent = "";
     loading.hidden = false;
@@ -287,6 +292,113 @@ nextPage.addEventListener("click", () => {
 
 
 /* =========================================
+   MOBILE FLOATING SEARCH
+   Opens and closes the mobile search bar.
+   ========================================= */
+
+const mobileSearchToggle = document.getElementById("mobile-search-toggle");
+
+mobileSearchToggle.addEventListener("click", () => {
+
+    // Toggle the mobile search bar
+    const isOpen = document.body.classList.toggle("mobile-search-open");
+
+    // Close the filters panel when opening search
+    if (isOpen) {
+        closeMobileFilters();
+    }
+
+    // Update accessibility information
+    mobileSearchToggle.setAttribute("aria-expanded", isOpen);
+    mobileSearchToggle.setAttribute(
+        "aria-label",
+        isOpen ? "Close movie search" : "Open movie search"
+    );
+
+    // Focus the input when the search bar opens
+    if (isOpen) {
+        searchInput.focus();
+    }
+});
+
+
+
+
+/* =========================================
+   MOBILE FLOATING FILTERS
+   Reuses the existing filter dropdowns.
+   ========================================= */
+
+const mobileFilterToggle = document.getElementById("mobile-filter-toggle");
+const mobileFilterPanel = document.getElementById("mobile-filter-panel");
+const mobileFilterControls = document.getElementById("mobile-filter-controls");
+
+const discoverFilters = document.querySelector(".discover__filters");
+const discoverHeader = document.querySelector(".discover__header");
+
+// Match the mobile breakpoint used in styles.css
+const mobileBreakpoint = window.matchMedia("(max-width: 600px)");
+
+// Close the filter panel and reset its button
+const closeMobileFilters = () => {
+    mobileFilterPanel.hidden = true;
+
+    mobileFilterToggle.setAttribute("aria-expanded", "false");
+    mobileFilterToggle.setAttribute("aria-label", "Open movie filters");
+};
+
+// Move the SAME dropdowns between desktop and mobile
+const updateFilterLayout = () => {
+
+    if (mobileBreakpoint.matches) {
+
+        // Mobile: Move filters into the floating panel
+        mobileFilterControls.appendChild(discoverFilters);
+
+    } else {
+
+        // Desktop: Return filters to their original section
+        discoverHeader.appendChild(discoverFilters);
+
+        closeMobileFilters();
+    }
+};
+
+// Set the correct layout when the page loads
+updateFilterLayout();
+
+// Update the layout when the screen size changes
+mobileBreakpoint.addEventListener("change", updateFilterLayout);
+
+// Open or close the floating filter panel
+mobileFilterToggle.addEventListener("click", () => {
+
+    const isOpening = mobileFilterPanel.hidden;
+
+    // Close the panel if it is already open
+    if (!isOpening) {
+        closeMobileFilters();
+        return;
+    }
+
+    // Close floating search before opening filters
+    document.body.classList.remove("mobile-search-open");
+
+    mobileSearchToggle.setAttribute("aria-expanded", "false");
+    mobileSearchToggle.setAttribute("aria-label", "Open movie search");
+
+    searchInput.blur();
+
+    // Show the filter panel
+    mobileFilterPanel.hidden = false;
+
+    mobileFilterToggle.setAttribute("aria-expanded", "true");
+    mobileFilterToggle.setAttribute("aria-label", "Close movie filters");
+});
+
+
+
+/* =========================================
    SEARCH FORM
    Executes a movie search on submission.
    ========================================= */
@@ -304,6 +416,14 @@ searchForm.addEventListener("submit", (event) => {
 
     // Execute the OMDb API request
     fetchMovies(searchQuery);
+
+
+    // Close the floating search after submitting
+    document.body.classList.remove("mobile-search-open");
+    mobileSearchToggle.setAttribute("aria-expanded", "false");
+    mobileSearchToggle.setAttribute("aria-label", "Open movie search");
+    searchInput.blur();
+
 
 });
 
