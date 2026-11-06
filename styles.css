@@ -1,3 +1,22 @@
+/* ==========================
+   SMOOTH SCROLLING
+=============================
+========== */
+
+/* Smooth transitions when navigating to page sections */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Respect accessibility preferences */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+
+
 /* =========================================
    SCENEO — THE CINEMATIC VAULT
    Main Stylesheet
@@ -296,3 +315,320 @@ a {
         padding: 12px 18px;
     }
 }
+
+
+
+/* =========================================
+   DISCOVER SECTION
+   Displays movie results from the OMDb API.
+   ========================================= */
+
+/* Main discovery section */
+.discover {
+    min-height: 500px;
+    padding: 70px 0 100px;
+}
+
+/* Heading and filter controls container */
+.discover__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+/* Explore Movies heading */
+.discover__title {
+    font-size: clamp(26px, 3vw, 34px);
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+/* Search instructions, empty results, and errors */
+.status-message {
+    padding: 30px 0;
+    color: var(--text-secondary);
+    font-size: 15px;
+    text-align: center;
+}
+
+/* =========================================
+   MOVIE RESULTS GRID
+   JavaScript will dynamically generate cards.
+   ========================================= */
+
+.movies {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 28px;
+}
+
+/* =========================================
+   DISCOVER RESPONSIVENESS
+   ========================================= */
+
+/* Tablets: three movie cards per row */
+@media (max-width: 900px) {
+    .movies {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 20px;
+    }
+}
+
+/* Mobile: two movie cards per row */
+@media (max-width: 600px) {
+    .discover {
+        padding: 50px 0 70px;
+    }
+
+    .discover__header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .movies {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+    }
+
+    .status-message {
+        font-size: 14px;
+    }
+}
+
+
+
+/* =========================================
+   MOVIE CARDS
+   Reusable card design for OMDb results.
+   ========================================= */
+
+/* Individual movie card */
+.movie-card {
+    min-width: 0;
+    overflow: hidden;
+    background-color: var(--bg-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    transition: transform 250ms ease, border-color 250ms ease;
+}
+
+/* Movie poster */
+.movie-card__poster {
+    display: block;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    background-color: #24283b;
+}
+
+/* Movie information container */
+.movie-card__content {
+    padding: 16px;
+}
+
+/* Movie title */
+.movie-card__title {
+    margin-bottom: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+/* Release year and content type */
+.movie-card__meta {
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+/* Hover effects for mouse-based devices */
+@media (hover: hover) {
+    .movie-card:hover {
+        transform: translateY(-6px);
+        border-color: var(--accent);
+    }
+}
+
+/* Mobile card adjustments */
+@media (max-width: 600px) {
+    .movie-card {
+        border-radius: 12px;
+    }
+
+    .movie-card__content {
+        padding: 12px;
+    }
+
+    .movie-card__title {
+        font-size: 14px;
+    }
+
+    .movie-card__meta {
+        font-size: 12px;
+    }
+}
+
+/* Respect reduced-motion accessibility settings */
+@media (prefers-reduced-motion: reduce) {
+    .movie-card {
+        transition: none;
+    }
+}
+
+
+
+/* =========================================
+   MOVIE FILTERS & SORTING
+   Dropdown controls for filtering OMDb results.
+   ========================================= */
+
+/* Container for the filter dropdowns */
+.discover__filters {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Shared dropdown appearance */
+.filter__select {
+    min-width: 150px;
+    padding: 12px 36px 12px 16px;
+
+    background-color: var(--bg-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+    outline: none;
+    transition: border-color 200ms ease;
+
+    /* Native dropdown arrow adapts to dark styling */
+    color-scheme: dark;
+}
+
+/* Hover and keyboard focus states */
+.filter__select:hover,
+.filter__select:focus-visible {
+    border-color: var(--accent);
+}
+
+/* Dropdown menu options */
+.filter__select option {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+/* =========================================
+   MOBILE FILTER LAYOUT
+   ========================================= */
+
+@media (max-width: 600px) {
+
+    /* Filters fill the available mobile width */
+    .discover__filters {
+        width: 100%;
+        gap: 10px;
+    }
+
+    /* Equal-width, touch-friendly dropdowns */
+    .filter__select {
+        flex: 1;
+        min-width: 0;
+        width: 50%;
+        padding: 12px 8px;
+        font-size: 12px;
+    }
+}
+
+
+/* Display a placeholder when OMDb has no poster */
+.movie-card__poster--empty {
+    display: grid;
+    place-items: center;
+    padding: 16px;
+    color: var(--text-secondary);
+    text-align: center;
+    font-size: 14px;
+}
+
+
+/* =========================================
+   MOVIE PAGINATION
+   Navigation controls for multiple result pages.
+   ========================================= */
+
+/* Pagination layout */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    margin-top: 48px;
+    padding: 20px 0;
+}
+
+/* Keep pagination hidden until JavaScript enables it */
+.pagination[hidden] {
+    display: none;
+}
+
+/* Previous and Next buttons */
+.pagination__button {
+    padding: 12px 20px;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 200ms ease;
+}
+
+/* Button hover and keyboard focus */
+.pagination__button:hover:not(:disabled),
+.pagination__button:focus-visible:not(:disabled) {
+    background-color: var(--accent);
+    color: var(--bg-primary);
+    border-color: var(--accent);
+}
+
+/* Disabled buttons */
+.pagination__button:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+/* Page counter */
+.pagination__info {
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+    .pagination {
+        gap: 12px;
+        margin-top: 32px;
+    }
+
+    .pagination__button {
+        padding: 12px;
+        font-size: 12px;
+    }
+
+    .pagination__info {
+        font-size: 12px;
+    }
+}
+

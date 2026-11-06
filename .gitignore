@@ -1,2 +1,38 @@
-.vscode
-.gitignore
+
+# =========================================
+# SCENEO — THE CINEMATIC VAULT
+# Git Ignore Configuration
+# =========================================
+
+# Local VS Code settings and workspace files
+.vscode/
+
+# Node.js dependencies (if added later)
+node_modules/
+
+# Local environment files and secrets
+.env
+.env.local
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# =========================================
+# SCENEO — THE CINEMATIC VAULT
+# Git Ignore Configuration
+# =========================================
+
+# Local VS Code settings and workspace files
+.vscode/
+
+# Node.js dependencies (if added later)
+node_modules/
+
+# Local environment files and secrets
+.env
+.env.local
+
+# Operating system files
+.DS_Store
+Thumbs.db

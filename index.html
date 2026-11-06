@@ -105,9 +105,37 @@
 
                 <!-- Section heading and future filter controls -->
                 <div class="discover__header">
+
                     <h2 class="discover__title">
                         Explore <span class="purple">Movies</span>
                     </h2>
+
+
+                    <!-- =========================================
+                      MOVIE FILTERS
+                      Allows users to filter and sort search results.
+                      ========================================= -->
+                    <div class="discover__filters">
+
+                        <!-- Filter results by content type -->
+                        <select id="type-filter" class="filter__select" aria-label="Filter by content type">
+                            <option value="">All Types</option>
+                            <option value="movie">Movies</option>
+                            <option value="series">TV Series</option>
+                        </select>
+
+                        <!-- Sort displayed movies by title or release year -->
+                        <select id="sort-filter" class="filter__select" aria-label="Sort search results">
+                            <option value="">Sort By</option>
+                            <option value="az">Title: A to Z</option>
+                            <option value="za">Title: Z to A</option>
+                            <option value="newest" selected>Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                        </select>
+
+                    </div>
+
+
                 </div>
 
                 <!-- Search results and application messages -->
@@ -118,6 +146,34 @@
                 <!-- Movie cards will be generated here by JavaScript -->
                 <div id="movies-container" class="movies">
                 </div>
+
+
+
+                <!-- =========================================
+                   MOVIE PAGINATION
+                   Allows users to navigate between
+                   pages of OMDb search results.
+                 ========================================= -->
+                <nav class="pagination" id="pagination" aria-label="Movie results pages" hidden>
+
+                    <!-- Navigate to the previous results page -->
+                    <button class="pagination__button" id="prev-page" type="button">
+                        ← Previous
+                    </button>
+
+                    <!-- Display the current page and total pages -->
+                    <span class="pagination__info" id="page-info" aria-live="polite">
+                        Page 1 of 1
+                    </span>
+
+                    <!-- Navigate to the next results page -->
+                    <button class="pagination__button" id="next-page" type="button">
+                        Next →
+                    </button>
+
+                </nav>
+
+
 
             </div>
         </section>
@@ -132,6 +188,8 @@
 
 
 
+    <!-- Main application JavaScript -->
+    <script src="./script.js" defer></script>
 
 </body>
 
