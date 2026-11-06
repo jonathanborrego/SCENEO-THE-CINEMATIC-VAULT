@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Main stylesheet -->
+    <link rel="stylesheet" href="./styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCENEO | The Cinematic Vault</title>
+</head>
+
+<body>
+
+
+    <!-- NAVIGATION -->
+    <header class="site-header">
+        <nav class="nav">
+
+            <!-- LOGO -->
+            <a href="index.html" class="logo">
+                <span class="logo__name">
+                    SCENEO<span class="purple">.</span>
+                </span>
+                <small class="logo__subtitle">
+                    THE CINEMATIC VAULT
+                </small>
+            </a>
+
+            <!-- NAVIGATION LINKS -->
+            <div class="nav__links">
+                <a href="#discover" class="nav__link">
+                    Discover
+                </a>
+            </div>
+
+        </nav>
+    </header>
+
+
+
+    <!-- =========================================
+     MAIN CONTENT
+     ========================================= -->
+    <main>
+
+        <!-- =========================================
+         HERO SECTION
+         Introduces SCENEO and its purpose.
+         ========================================= -->
+        <section class="hero">
+            <div class="container">
+
+                <!-- Hero introduction -->
+                <div class="hero__content">
+
+                    <p class="hero__label">
+                        WELCOME TO SCENEO
+                    </p>
+
+                    <!-- Main headline -->
+                    <h1 class="hero__title">
+                        Every story deserves a
+                        <span class="purple">spotlight.</span>
+                    </h1>
+
+                    <!-- Supporting description -->
+                    <p class="hero__description">
+                        Discover extraordinary films, explore timeless
+                        stories, and find your next favorite movie.
+                    </p>
+
+
+                    <!-- =========================================
+                      MOVIE SEARCH
+                      Allows users to search the OMDb database.
+                      JavaScript will handle the form submission.
+                      ========================================= -->
+                    <form class="search" id="search-form">
+
+                        <!-- Movie or TV show title -->
+                        <input type="search" class="search__input" id="search-input" name="search"
+                            placeholder="Search movies or TV shows..." aria-label="Search movies or TV shows" required>
+
+                        <!-- Submit search request -->
+                        <button type="submit" class="search__button">
+                            Search
+                        </button>
+
+                    </form>
+
+
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>
