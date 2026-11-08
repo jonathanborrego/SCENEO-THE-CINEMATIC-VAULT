@@ -259,6 +259,806 @@ main {
 }
 
 
+
+/* =========================================
+   FAVORITES NAVIGATION BUTTON
+   Displays saved movies and TV show count.
+   ========================================= */
+
+/* Align the heart, label, and counter */
+
+/* Favorites navbar button */
+#favorites-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    /* Proper navigation button dimensions */
+    min-height: 44px;
+    padding: 0 16px;
+
+    /* Typography */
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+
+    /* SCENEO purple glass styling */
+    background: rgba(167, 139, 250, 0.1);
+    border: 1px solid rgba(167, 139, 250, 0.4);
+    border-radius: 12px;
+
+    /* Subtle glow */
+    box-shadow: 0 4px 16px rgba(167, 139, 250, 0.08);
+
+    transition: background 200ms ease, border-color 200ms ease;
+}
+
+
+/* Purple heart icon */
+#favorites-link svg {
+    flex-shrink: 0;
+    color: #a78bfa;
+}
+
+/* Small badge showing saved items */
+#favorites-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+
+    background: rgba(167, 139, 250, 0.2);
+    color: #c4b5fd;
+
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* Highlight the button on desktop hover */
+#favorites-link:hover {
+    background: rgba(167, 139, 250, 0.2);
+    border-color: #a78bfa;
+}
+
+/* Keep the button compact on smaller phones */
+@media (max-width: 360px) {
+    #favorites-link {
+        gap: 6px;
+        padding: 9px;
+        font-size: 12px;
+    }
+}
+
+
+/* =========================================
+   GLOBAL STICKY NAVIGATION
+   Keeps the navbar visible while scrolling
+   on desktop, tablet, and mobile.
+   ========================================= */
+
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 300;
+
+    /* Maintain the dark cinematic appearance */
+    background: rgba(11, 14, 25, 0.527);
+
+    /* Subtle glass effect while scrolling */
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+
+/* =========================================
+   MOVIE CARD FAVORITE BUTTON
+   Floating heart for saving movies and shows.
+   ========================================= */
+
+/* Anchor the favorite button to each movie card */
+.movie-card {
+    position: relative;
+}
+
+/* Heart button over the poster */
+.movie-card__favorite {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Dark glass appearance */
+    background: rgba(11, 14, 25, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    color: #ffffff;
+    border: 1px solid rgba(167, 139, 250, 0.4);
+    border-radius: 50%;
+
+    font-size: 27px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition: transform 200ms ease,
+        background 200ms ease,
+        border-color 200ms ease;
+}
+
+/* Highlight saved favorites */
+.movie-card__favorite.is-favorite {
+    background: #8054d9;
+    border-color: #a78bfa;
+    color: #ffffff;
+}
+
+/* Desktop hover effect */
+@media (hover: hover) {
+    .movie-card__favorite:hover {
+        transform: scale(1.1);
+        border-color: #a78bfa;
+    }
+}
+
+/* Mobile tap feedback */
+.movie-card__favorite:active {
+    transform: scale(0.92);
+}
+
+/* Keyboard accessibility */
+.movie-card__favorite:focus-visible {
+    outline: 2px solid #a78bfa;
+    outline-offset: 3px;
+}
+
+/* Disable animations when reduced motion is preferred */
+@media (prefers-reduced-motion: reduce) {
+    .movie-card__favorite {
+        transition: none;
+    }
+}
+
+
+/* =========================================
+   FAVORITES — BACK NAVIGATION
+   Returns visitors to their previous movies.
+   ========================================= */
+
+#back-to-movies {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    width: fit-content;
+    margin-bottom: 24px;
+    padding: 10px 14px;
+
+    /* Typography */
+    color: #c4b5fd;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+
+    /* Subtle purple glass styling */
+    background: rgba(167, 139, 250, 0.08);
+    border: 1px solid rgba(167, 139, 250, 0.2);
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    transition: background 200ms ease,
+        border-color 200ms ease;
+}
+
+/* Highlight the button on hover */
+#back-to-movies:hover {
+    background: rgba(167, 139, 250, 0.18);
+    border-color: #a78bfa;
+}
+
+/* Keyboard navigation */
+#back-to-movies:focus-visible {
+    outline: 2px solid #a78bfa;
+    outline-offset: 3px;
+}
+
+/* Make the arrow slightly more prominent */
+#back-to-movies span {
+    font-size: 18px;
+    line-height: 1;
+}
+
+
+/* =========================================
+   FRESH RELEASES — HOMEPAGE
+   Compact movie and TV show collections.
+   ========================================= */
+
+/* Main homepage releases section */
+.fresh-releases {
+    min-height: 0;
+    padding: 40px 0 50px;
+}
+
+/* Section heading and description */
+.fresh-releases__header {
+    margin-bottom: 28px;
+}
+
+.fresh-releases__description {
+    margin-top: 8px;
+    color: #aab1c5;
+    font-size: 13px;
+}
+
+/* Separate movies and TV shows */
+.fresh-releases__group {
+    margin-top: 28px;
+}
+
+/* Category heading */
+.fresh-releases__title {
+    margin-bottom: 16px;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* Four featured titles per row on desktop */
+.fresh-releases .movies {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+}
+
+/* =========================================
+   MOBILE FRESH RELEASES
+   Swipeable poster rows, like a mobile app.
+   ========================================= */
+
+@media (max-width: 600px) {
+
+    .fresh-releases {
+        padding: 28px 0 36px;
+    }
+
+    .fresh-releases__header {
+        margin-bottom: 20px;
+    }
+
+    .fresh-releases__title {
+        font-size: 16px;
+        margin-bottom: 12px;
+    }
+
+    .fresh-releases__group {
+        margin-top: 22px;
+    }
+
+    /* Horizontal scrolling movie cards */
+    .fresh-releases .movies {
+        grid-template-columns: none;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(125px, 42%);
+        gap: 12px;
+
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x proximity;
+        -webkit-overflow-scrolling: touch;
+
+        padding: 4px 2px 12px;
+    }
+
+    /* Each movie card snaps into place */
+    .fresh-releases .movie-card {
+        scroll-snap-align: start;
+        min-width: 0;
+    }
+
+    /* Smaller favorite hearts on featured cards */
+    .fresh-releases .movie-card__favorite {
+        width: 34px;
+        height: 34px;
+        font-size: 22px;
+    }
+}
+
+
+
+/* =========================================
+   SCENEO — CINEMATIC MOVIE DETAILS
+   Responsive movie and TV information page.
+   ========================================= */
+
+/* Main details section */
+.details {
+    min-height: 100%;
+    padding: 35px 0 70px;
+
+    background:
+        radial-gradient(ellipse at 75% 10%,
+            rgba(124, 58, 237, 0.12),
+            transparent 55%),
+        #0b0e19;
+}
+
+/* Back to search results */
+.details__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 25px;
+
+    color: #c4b5fd;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+
+    transition: color 200ms ease;
+}
+
+.details__back:hover {
+    color: #ffffff;
+}
+
+.details__back:focus-visible {
+    outline: 2px solid #a78bfa;
+    outline-offset: 5px;
+    border-radius: 4px;
+}
+
+/* Main cinematic hero panel */
+.details__hero {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    align-items: center;
+    gap: 40px;
+
+    padding: 40px;
+
+    background:
+        radial-gradient(ellipse at 90% 0%,
+            rgba(139, 92, 246, 0.17),
+            transparent 60%),
+        #171b2b;
+
+    border: 1px solid rgba(167, 139, 250, 0.2);
+    border-radius: 22px;
+
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+/* Movie poster */
+.details__poster {
+    display: block;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+
+    object-fit: cover;
+
+    border-radius: 14px;
+    border: 1px solid rgba(167, 139, 250, 0.3);
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.45),
+        0 0 30px rgba(167, 139, 250, 0.1);
+}
+
+/* Right-side movie information */
+.details__info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+    min-width: 0;
+}
+
+/* Movie or TV show title */
+.details__title {
+    color: #ffffff;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -1px;
+}
+
+/* Year, content rating, and runtime */
+.details__meta {
+    color: #aab1c5;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* IMDb rating badge */
+.details__rating {
+    display: inline-flex;
+    align-items: center;
+
+    width: fit-content;
+    padding: 10px 16px;
+
+    color: #c4b5fd;
+    background: rgba(167, 139, 250, 0.12);
+
+    border: 1px solid rgba(167, 139, 250, 0.3);
+    border-radius: 10px;
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+/* Movie synopsis */
+.details__plot {
+    max-width: 680px;
+
+    color: #c5cad9;
+    font-size: 15px;
+    line-height: 1.85;
+}
+
+/* =========================================
+   TABLET RESPONSIVENESS
+   ========================================= */
+
+@media (max-width: 900px) {
+
+    .details__hero {
+        grid-template-columns: 220px minmax(0, 1fr);
+        gap: 25px;
+        padding: 25px;
+    }
+
+    .details__title {
+        font-size: 34px;
+    }
+}
+
+/* =========================================
+   MOBILE RESPONSIVENESS
+   Stack the poster and movie information.
+   ========================================= */
+
+@media (max-width: 600px) {
+
+    .details {
+        padding: 25px 0 45px;
+    }
+
+    .details__back {
+        margin-bottom: 20px;
+        font-size: 13px;
+    }
+
+    .details__hero {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 22px 18px;
+
+        border-radius: 18px;
+    }
+
+    .details__poster {
+        width: 100%;
+        max-width: 220px;
+        margin: 0 auto;
+    }
+
+    .details__info {
+        gap: 14px;
+    }
+
+    .details__title {
+        font-size: 30px;
+        letter-spacing: -0.5px;
+    }
+
+    .details__meta {
+        font-size: 13px;
+    }
+
+    .details__rating {
+        font-size: 13px;
+        padding: 9px 12px;
+    }
+
+    .details__plot {
+        font-size: 14px;
+        line-height: 1.75;
+    }
+}
+
+
+/* =========================================
+   MOVIE DETAILS — GENRE BADGES
+   ========================================= */
+
+/* Keep genres aligned and allow wrapping */
+.details__genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* Individual genre tags */
+.details__genre {
+    padding: 7px 12px;
+
+    color: #c4b5fd;
+    background: rgba(167, 139, 250, 0.1);
+
+    border: 1px solid rgba(167, 139, 250, 0.35);
+    border-radius: 20px;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* =========================================
+   MOVIE DETAILS — GENRE BADGES
+   ========================================= */
+
+/* Keep genres aligned and allow wrapping */
+.details__genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* Individual genre tags */
+.details__genre {
+    padding: 7px 12px;
+
+    color: #c4b5fd;
+    background: rgba(167, 139, 250, 0.1);
+
+    border: 1px solid rgba(167, 139, 250, 0.35);
+    border-radius: 20px;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+
+/* =========================================
+   MOVIE DETAILS — PRODUCTION & CAST
+   Responsive information panel.
+   ========================================= */
+
+/* Main production section */
+.details__production {
+    margin-top: 28px;
+    padding: 30px;
+
+    background: #171b2b;
+    border: 1px solid rgba(167, 139, 250, 0.2);
+    border-radius: 20px;
+}
+
+/* Section heading */
+.details__section-title {
+    margin-bottom: 24px;
+
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+/* Two-column information layout */
+.details__production-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 35px;
+}
+
+/* Individual information field */
+.details__production-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+}
+
+/* Information labels */
+.details__production-item dt {
+    color: #969db5;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Information values */
+.details__production-item dd {
+    margin: 0;
+
+    color: #ffffff;
+    font-size: 14px;
+    line-height: 1.65;
+
+    overflow-wrap: anywhere;
+}
+
+/* =========================================
+   MOBILE PRODUCTION LAYOUT
+   ========================================= */
+
+@media (max-width: 600px) {
+
+    .details__production {
+        margin-top: 20px;
+        padding: 22px 18px;
+        border-radius: 18px;
+    }
+
+    .details__section-title {
+        margin-bottom: 22px;
+        font-size: 19px;
+    }
+
+    /* Stack information vertically */
+    .details__production-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .details__production-item dd {
+        font-size: 13px;
+    }
+}
+
+
+
+/* =========================================
+   CLICKABLE MOVIE CARDS
+   Full-card link with independent favorite.
+   ========================================= */
+
+/* Make the entire movie card clickable */
+.movie-card__details-link {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+    cursor: pointer;
+}
+
+/* Highlight the card during keyboard navigation */
+.movie-card__details-link:focus-visible {
+    outline: 2px solid #a78bfa;
+    outline-offset: -3px;
+}
+
+/* Keep the favorite button above the link */
+.movie-card__favorite {
+    z-index: 2;
+}
+
+
+
+/* =========================================
+   DETAILS PAGE — FAVORITES BUTTON
+   Purple glass styling for saving titles.
+   ========================================= */
+
+.details__favorite {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    min-height: 46px;
+    margin-top: 8px;
+    padding: 12px 22px;
+
+    /* Typography */
+    color: #c4b5fd;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+
+    /* Purple glass appearance */
+    background: rgba(167, 139, 250, 0.12);
+    border: 1px solid rgba(167, 139, 250, 0.45);
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    transition:
+        background 200ms ease,
+        transform 200ms ease,
+        border-color 200ms ease;
+}
+
+/* Saved movie appearance */
+.details__favorite[aria-pressed="true"] {
+    background: #8054d9;
+    color: #ffffff;
+    border-color: #a78bfa;
+}
+
+/* Desktop hover */
+@media (hover: hover) {
+    .details__favorite:hover {
+        background: #8054d9;
+        color: #ffffff;
+        transform: translateY(-2px);
+    }
+}
+
+/* Mobile touch feedback */
+.details__favorite:active {
+    transform: scale(0.97);
+}
+
+/* Keyboard accessibility */
+.details__favorite:focus-visible {
+    outline: 2px solid #a78bfa;
+    outline-offset: 4px;
+}
+
+/* Mobile layout */
+@media (max-width: 600px) {
+    .details__favorite {
+        width: 100%;
+        font-size: 13px;
+    }
+}
+
+/* Accessibility: reduce animations */
+@media (prefers-reduced-motion: reduce) {
+    .details__favorite {
+        transition: none;
+    }
+}
+
+
+
+
+/* =========================================
+   ADDITIONAL MOVIE RATINGS
+   ========================================= */
+
+.details__extra-ratings {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.details__rating-badge {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 9px 14px;
+
+    color: #ffffff;
+    background: rgba(167, 139, 250, 0.08);
+
+    border: 1px solid rgba(167, 139, 250, 0.25);
+    border-radius: 10px;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+
 /* Respect reduced-motion settings */
 @media (prefers-reduced-motion: reduce) {
     .mobile-actions__button {

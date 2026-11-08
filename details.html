@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Individual movie and TV details page -->
+    <title>Movie Details | SCENEO</title>
+
+    <!-- Reuse the existing SCENEO stylesheet -->
+    <link rel="stylesheet" href="./styles.css">
+
+    <!-- Load the movie details logic -->
+    <script src="./details.js" defer></script>
+
+</head>
+
+<body>
+
+    <!-- =========================================
+         NAVIGATION
+         Uses the existing sticky navbar design.
+         ========================================= -->
+    <header class="site-header">
+        <nav class="nav" aria-label="Main navigation">
+
+            <!-- SCENEO logo returns to the homepage -->
+            <a href="./index.html" class="logo">
+                <span class="logo__name">
+                    SCENEO<span class="purple">.</span>
+                </span>
+
+                <small class="logo__subtitle">
+                    THE CINEMATIC VAULT
+                </small>
+            </a>
+
+            <div class="nav__links">
+                <a href="./index.html" class="nav__link">
+                    Back to Movies
+                </a>
+            </div>
+
+        </nav>
+    </header>
+
+    <!-- =========================================
+         MOVIE / TV DETAILS
+         Content will be populated using OMDb.
+         ========================================= -->
+    <main>
+        <section class="details" id="details">
+            <div class="container">
+
+                <!-- Return to SCENEO -->
+                <a href="./index.html" class="details__back">
+                    ← Back to Results
+                </a>
+
+                <!-- Loading, error and status messages -->
+                <p id="details-status" class="status-message" role="status">
+                    Movie details will appear here.
+                </p>
+
+                <!-- Dynamic cinematic details layout -->
+                <div id="details-content" hidden></div>
+
+            </div>
+        </section>
+    </main>
+
+</body>
+
+</html>

@@ -28,9 +28,24 @@
 
             <!-- NAVIGATION LINKS -->
             <div class="nav__links">
-                <a href="#discover" class="nav__link">
-                    Discover
+
+                <!-- Favorites navigation: saved locally in the browser -->
+                <a href="#favorites" class="nav__link" id="favorites-link">
+
+                    <!-- Heart icon -->
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path
+                            d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" />
+                    </svg>
+
+                    <span>Favorites</span>
+
+                    <!-- JavaScript will update this number -->
+                    <span id="favorites-count">0</span>
+
                 </a>
+
             </div>
 
         </nav>
@@ -93,6 +108,54 @@
 
             </div>
         </section>
+
+
+
+        <!-- =========================================
+     FRESH RELEASES — HOMEPAGE
+     Automatically displays recent movies
+     and TV shows when SCENEO first loads.
+     ========================================= -->
+        <section id="fresh-releases" class="discover fresh-releases">
+            <div class="container">
+
+                <!-- Section heading -->
+                <div class="fresh-releases__header">
+                    <h2 class="discover__title">
+                        Fresh <span class="purple">Releases</span>
+                    </h2>
+
+                    <p class="fresh-releases__description">
+                        Discover what's new in movies and television.
+                    </p>
+                </div>
+
+                <!-- Loading and error messages -->
+                <p id="fresh-releases-status" class="status-message" role="status">
+                    Loading recent releases...
+                </p>
+
+                <!-- Recently released movies -->
+                <div class="fresh-releases__group">
+                    <h3 class="fresh-releases__title">
+                        Movies
+                    </h3>
+
+                    <div id="recent-movies" class="movies"></div>
+                </div>
+
+                <!-- Recently released TV shows -->
+                <div class="fresh-releases__group">
+                    <h3 class="fresh-releases__title">
+                        TV Shows
+                    </h3>
+
+                    <div id="recent-series" class="movies"></div>
+                </div>
+
+            </div>
+        </section>
+
 
 
         <!-- =========================================
@@ -198,7 +261,50 @@
         </section>
 
 
+
+
+
+        <!-- =========================================
+     MY FAVORITES SECTION
+     Displays movies and TV shows saved
+     in the browser's localStorage.
+     ========================================= -->
+        <section id="favorites" class="discover favorites" hidden>
+            <div class="container">
+
+
+                <!-- Return to previous search results or homepage -->
+                <button type="button" id="back-to-movies" class="favorites__back">
+                    <span aria-hidden="true">←</span>
+                    Back to Movies
+                </button>
+
+
+
+                <!-- Favorites heading -->
+                <div class="discover__header">
+                    <h2 class="discover__title">
+                        My <span class="purple">Favorites</span>
+                    </h2>
+                </div>
+
+                <!-- Message for empty favorites -->
+                <p id="favorites-status" class="status-message" role="status">
+                    You haven't saved any favorites yet.
+                    Tap the heart on a movie or TV show to save it here.
+                </p>
+
+                <!-- Saved movies will appear here -->
+                <div id="favorites-container" class="movies"></div>
+
+            </div>
+        </section>
+
+
+
     </main>
+
+
 
 
 

@@ -60,6 +60,135 @@ let currentPage = 1;
 let totalPages = 1;
 
 
+/* =========================================
+   FAVORITES — LOCAL STORAGE
+   Saves movies and TV shows in the browser.
+   ========================================= */
+
+// Name used to store favorites in localStorage
+const FAVORITES_KEY = "sceneo-favorites";
+
+// Navbar counter
+const favoritesCount = document.getElementById("favorites-count");
+
+// Get all previously saved favorites
+const getFavorites = () => {
+    try {
+        const saved = localStorage.getItem(FAVORITES_KEY);
+
+        // Return an empty array if nothing is saved yet
+        const favorites = saved ? JSON.parse(saved) : [];
+
+        return Array.isArray(favorites) ? favorites : [];
+    } catch (error) {
+        console.error("Could not load favorites:", error);
+        return [];
+    }
+};
+
+// Update the number displayed in the navbar
+const updateFavoritesCount = () => {
+    favoritesCount.textContent = getFavorites().length;
+};
+
+// Save favorites and refresh the navbar counter
+const saveFavorites = (favorites) => {
+    try {
+        localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+        updateFavoritesCount();
+    } catch (error) {
+        console.error("Could not save favorites:", error);
+    }
+};
+
+// Display the saved count when SCENEO loads
+updateFavoritesCount();
+
+
+/* =========================================
+   FAVORITES SECTION NAVIGATION
+   Shows movies saved in localStorage.
+   ========================================= */
+
+// Favorites section and its elements
+const favoritesLink = document.getElementById("favorites-link");
+const favoritesSection = document.getElementById("favorites");
+const favoritesContainer = document.getElementById("favorites-container");
+const favoritesStatus = document.getElementById("favorites-status");
+const discoverSection = document.getElementById("discover");
+
+// Open the saved favorites collection
+favoritesLink.addEventListener("click", (event) => {
+    event.preventDefault();
+
+    // Retrieve saved movies and TV shows
+    const favorites = getFavorites();
+
+    // Switch from search results to favorites
+    discoverSection.hidden = true;
+    favoritesSection.hidden = false;
+
+    // Hide homepage releases while viewing favorites
+    document.getElementById("fresh-releases").hidden = true;
+
+    // Show a helpful message if nothing is saved
+    favoritesStatus.hidden = favorites.length > 0;
+
+    // Reuse the existing movie card renderer
+    renderMovies(favorites, favoritesContainer);
+
+    // Scroll to the favorites section
+    favoritesSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+});
+
+
+/* =========================================
+   BACK TO MOVIES NAVIGATION
+   Restores previous search results or home.
+   ========================================= */
+
+// Get the Back to Movies button
+const backToMovies = document.getElementById("back-to-movies");
+
+backToMovies.addEventListener("click", () => {
+
+    // Hide the Favorites section
+    favoritesSection.hidden = true;
+
+    // Check whether previous search results exist
+    const hasPreviousResults = currentMovies.length > 0;
+
+    // Restore results only when movies were previously loaded
+    discoverSection.hidden = !hasPreviousResults;
+
+    // Restore Fresh Releases only if no search results exist
+    document.getElementById("fresh-releases").hidden = hasPreviousResults;
+
+    if (hasPreviousResults) {
+
+        // Return to the existing movie results
+        discoverSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    } else {
+
+        // No previous results: return to the homepage
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
+});
+
+
+
+
+
 
 /* =========================================
    FETCH MOVIES
@@ -75,6 +204,10 @@ let totalPages = 1;
 
 const fetchMovies = async (searchQuery, page = 1) => {
 
+    // Show search results and hide other sections
+    document.getElementById("fresh-releases").hidden = true;
+    document.getElementById("favorites").hidden = true;
+
 
     // Show the Discover section once a search begins
     document.getElementById("discover").hidden = false;
@@ -83,8 +216,6 @@ const fetchMovies = async (searchQuery, page = 1) => {
     // Clear the previous message and show the spinner
     statusMessage.textContent = "";
     loading.hidden = false;
-    // moviesContainer.replaceChildren();
-    // pagination.hidden = true;
 
 
 
@@ -189,6 +320,159 @@ const fetchMovies = async (searchQuery, page = 1) => {
 };
 
 
+
+/* =========================================
+   FRESH RELEASES — TMDB API
+   Loads recently released movies and TV shows.
+   Uses IMDb IDs for existing SCENEO features.
+   ========================================= */
+
+const TMDB_API_KEY = "b22b2b8abb847cc58180b44a32ff6554";
+const TMDB_API_URL = "https://api.themoviedb.org/3";
+const TMDB_POSTER_URL = "https://image.tmdb.org/t/p/w500";
+
+// Homepage containers
+const recentMoviesContainer = document.getElementById("recent-movies");
+const recentSeriesContainer = document.getElementById("recent-series");
+const freshReleasesStatus = document.getElementById("fresh-releases-status");
+
+// Make a request to TMDb
+const fetchTMDB = async (path, parameters = {}) => {
+
+    const url = new URL(`${TMDB_API_URL}${path}`);
+
+    // Authenticate using the TMDb v3 API key
+    url.searchParams.set("api_key", TMDB_API_KEY);
+
+    // Add optional filters to the request
+    Object.entries(parameters).forEach(([name, value]) => {
+        url.searchParams.set(name, value);
+    });
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+        throw new Error(`TMDb request failed: ${response.status}`);
+    }
+
+    return response.json();
+};
+
+// Format a date as YYYY-MM-DD using local time
+const formatTMDBDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+};
+
+// Retrieve four recent titles compatible with OMDb cards
+const getRecentTitles = async (type, startDate, endDate) => {
+
+    const isMovie = type === "movie";
+
+    // Movies and TV shows have different release-date fields
+    const dateField = isMovie
+        ? "primary_release_date"
+        : "first_air_date";
+
+    const data = await fetchTMDB(`/discover/${type}`, {
+        [`${dateField}.gte`]: startDate,
+        [`${dateField}.lte`]: endDate,
+        "sort_by": "popularity.desc",
+        "vote_count.gte": 5,
+        "language": "en-US"
+    });
+
+    // Consider titles that have artwork
+    const candidates = data.results
+        .filter((item) => item.poster_path)
+        .slice(0, 12);
+
+    // Convert TMDb titles to our existing OMDb card structure
+    const titles = await Promise.all(
+        candidates.map(async (item) => {
+
+            try {
+                // Look up the IMDb ID for Favorites and details
+                const externalIDs = await fetchTMDB(
+                    `/${type}/${item.id}/external_ids`
+                );
+
+                // Skip titles without a matching IMDb ID
+                if (!externalIDs.imdb_id) return null;
+
+                return {
+                    imdbID: externalIDs.imdb_id,
+                    Title: isMovie ? item.title : item.name,
+                    Year: (
+                        isMovie
+                            ? item.release_date
+                            : item.first_air_date
+                    )?.slice(0, 4) || "N/A",
+                    Type: isMovie ? "movie" : "series",
+                    Poster: `${TMDB_POSTER_URL}${item.poster_path}`
+                };
+
+            } catch (error) {
+                console.error("Could not load title details:", error);
+                return null;
+            }
+        })
+    );
+
+    // Remove unavailable titles and keep only four
+    return titles.filter(Boolean).slice(0, 4);
+};
+
+// Automatically load recent releases on the homepage
+const loadFreshReleases = async () => {
+
+    const today = new Date();
+
+    // Look back up to 120 days, staying within the current year
+    const yearStart = new Date(today.getFullYear(), 0, 1);
+    const recentStart = new Date(today);
+    recentStart.setDate(today.getDate() - 120);
+
+    const startDate = formatTMDBDate(
+        recentStart > yearStart ? recentStart : yearStart
+    );
+
+    const endDate = formatTMDBDate(today);
+
+    try {
+
+        // Fetch movies and television shows together
+        const [movies, series] = await Promise.all([
+            getRecentTitles("movie", startDate, endDate),
+            getRecentTitles("tv", startDate, endDate)
+        ]);
+
+        // Reuse our existing movie cards and favorite buttons
+        renderMovies(movies, recentMoviesContainer);
+        renderMovies(series, recentSeriesContainer);
+
+        // Hide loading text when releases are available
+        if (movies.length || series.length) {
+            freshReleasesStatus.hidden = true;
+        } else {
+            freshReleasesStatus.textContent =
+                "No recent releases are available right now.";
+        }
+
+    } catch (error) {
+
+        console.error("Fresh Releases error:", error);
+
+        freshReleasesStatus.textContent =
+            "Could not load recent releases. Please try again later.";
+    }
+};
+
+// Load featured titles when SCENEO opens
+loadFreshReleases();
 
 
 
@@ -469,10 +753,11 @@ searchForm.addEventListener("submit", (event) => {
    Dynamically creates cards from OMDb data.
    ========================================= */
 
-const renderMovies = (movies) => {
+// Render movie cards inside any specified container
+const renderMovies = (movies, targetContainer = moviesContainer) => {
 
     // Remove previous search results
-    moviesContainer.replaceChildren();
+    targetContainer.replaceChildren();
 
     // Create a card for each returned movie
     movies.forEach((movie) => {
@@ -480,6 +765,81 @@ const renderMovies = (movies) => {
         // Main card container
         const card = document.createElement("article");
         card.className = "movie-card";
+
+
+        /* =========================================
+           MOVIE CARD FAVORITE BUTTON
+           Saves or removes this movie locally.
+           ========================================= */
+
+        // Create the heart button
+        const favoriteButton = document.createElement("button");
+        favoriteButton.type = "button";
+        favoriteButton.className = "movie-card__favorite";
+
+        // Update the heart based on saved favorites
+        const updateFavoriteButton = () => {
+
+            const isFavorite = getFavorites().some(
+                (favorite) => favorite.imdbID === movie.imdbID
+            );
+
+            // Filled heart = saved, outlined heart = not saved
+            favoriteButton.textContent = isFavorite ? "♥" : "♡";
+
+            favoriteButton.classList.toggle("is-favorite", isFavorite);
+
+            // Accessibility for screen readers
+            favoriteButton.setAttribute("aria-pressed", String(isFavorite));
+            favoriteButton.setAttribute(
+                "aria-label",
+                isFavorite
+                    ? `Remove ${movie.Title} from favorites`
+                    : `Add ${movie.Title} to favorites`
+            );
+        };
+
+        // Display the correct heart when the card is created
+        updateFavoriteButton();
+
+        // Save or remove the movie when the heart is clicked
+        favoriteButton.addEventListener("click", () => {
+
+            const favorites = getFavorites();
+
+            // Check whether this title has already been saved
+            const alreadySaved = favorites.some(
+                (favorite) => favorite.imdbID === movie.imdbID
+            );
+
+            if (alreadySaved) {
+
+                // Remove this movie from saved favorites
+                const updatedFavorites = favorites.filter(
+                    (favorite) => favorite.imdbID !== movie.imdbID
+                );
+
+                saveFavorites(updatedFavorites);
+
+            } else {
+
+                // Save the movie details needed for its card
+                const favoriteMovie = {
+                    imdbID: movie.imdbID,
+                    Title: movie.Title,
+                    Year: movie.Year,
+                    Type: movie.Type,
+                    Poster: movie.Poster
+                };
+
+                saveFavorites([...favorites, favoriteMovie]);
+            }
+
+            // Refresh the heart after saving or removing
+            updateFavoriteButton();
+        });
+
+
 
         // Movie poster or fallback
         const hasPoster = movie.Poster && movie.Poster !== "N/A";
@@ -534,8 +894,117 @@ const renderMovies = (movies) => {
         content.append(title, meta);
         card.append(poster, content);
 
+
+        /* =========================================
+           MOVIE DETAILS NAVIGATION
+           Opens the selected title's details page.
+           ========================================= */
+
+        // Create a link to this movie's details page
+        const detailsLink = document.createElement("a");
+
+        detailsLink.href = `./details.html?id=${encodeURIComponent(movie.imdbID)}`;
+        detailsLink.className = "movie-card__details-link";
+
+        // Accessible description for screen readers
+        detailsLink.setAttribute(
+            "aria-label",
+            `View details for ${movie.Title}`
+        );
+
+
+        /* =========================================
+           SAVE CURRENT VIEW
+           Remember where the visitor was before
+           opening a movie or TV details page.
+           ========================================= */
+
+        detailsLink.addEventListener("click", () => {
+
+            // Identify the currently displayed section
+            const currentView = !favoritesSection.hidden
+                ? "favorites"
+                : !discoverSection.hidden
+                    ? "search"
+                    : "home";
+
+            // Store the search and navigation settings
+            const previousView = {
+                view: currentView,
+                search: currentSearch,
+                page: currentPage,
+                type: typeFilter.value,
+                sort: sortFilter.value
+            };
+
+            // Keep this information for the current browser tab
+            sessionStorage.setItem(
+                "sceneo-previous-view",
+                JSON.stringify(previousView)
+            );
+        });
+
+
+        /* =========================================
+           RESTORE PREVIOUS VIEW
+           Returns visitors to their previous search,
+           favorites, or homepage after movie details.
+           ========================================= */
+
+        const restorePreviousView = async () => {
+
+            // Retrieve the last saved view
+            const savedView = sessionStorage.getItem("sceneo-previous-view");
+
+            if (!savedView) return;
+
+            // Clear it so future visits start normally
+            sessionStorage.removeItem("sceneo-previous-view");
+
+            try {
+
+                const previousView = JSON.parse(savedView);
+
+                // Return to saved favorites
+                if (previousView.view === "favorites") {
+                    favoritesLink.click();
+                    return;
+                }
+
+                // Restore the previous movie search
+                if (previousView.view === "search" && previousView.search) {
+
+                    // Restore the search and filter selections
+                    searchInput.value = previousView.search;
+                    typeFilter.value = previousView.type || "";
+                    sortFilter.value = previousView.sort || "newest";
+
+                    // Load the same search results page
+                    await fetchMovies(
+                        previousView.search,
+                        previousView.page || 1
+                    );
+                }
+
+                // Otherwise, keep the normal Fresh Releases homepage
+
+            } catch (error) {
+                console.error("Could not restore previous view:", error);
+            }
+        };
+
+        // Restore the saved view when the homepage loads
+        restorePreviousView();
+
+
+
+        // Assemble the card
+        content.append(title, meta);
+        card.append(poster, favoriteButton, content, detailsLink);
+
+
         // Add the finished card to the grid
-        moviesContainer.append(card);
+        targetContainer.appendChild(card);
     });
 };
 
